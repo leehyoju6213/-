@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<title>MMT 암기 도우미</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#687386;--line:#e2e7f0;--pri:#4058c8;--soft:#eef1ff;--good:#16845b;--goodbg:#eaf8f1;--bad:#b83d3d;--badbg:#fff0f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}.wrap{width:min(980px,calc(100% - 28px));margin:auto}header{padding:18px 0;font-weight:850}.brand{display:flex;gap:10px;align-items:center}.logo{background:var(--pri);color:white;border-radius:12px;padding:7px 11px}.hero{text-align:center;padding:22px 0 28px}.eyebrow,.tag{display:inline-block;background:var(--soft);color:var(--pri);border-radius:99px;padding:4px 10px;font-size:.78rem;font-weight:750}h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.2;margin:12px 0}.hero p,.sub,.muted{color:var(--muted)}main{display:grid;gap:16px;padding-bottom:28px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:21px;box-shadow:0 10px 28px #1c2a4b0b}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}h2{font-size:1.1rem;margin:0}.sub{font-size:.88rem;margin:4px 0 0}.parts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.part{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 7px;font-weight:700;color:var(--ink)}.part.active{background:var(--soft);border-color:var(--pri);color:var(--pri)}button{font:inherit;cursor:pointer}.primary,.secondary,.ghost{border:0;border-radius:11px;padding:11px 15px;font-weight:750}.primary{background:var(--pri);color:#fff}.secondary{background:var(--soft);color:var(--pri)}.ghost{background:#f0f2f6;color:#455168}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.pill{background:#f0f2f6;border-radius:99px;padding:5px 10px;font-size:.78rem;font-weight:750;color:#536078}.empty{background:#f7f8fb;border-radius:12px;padding:18px;text-align:center;color:var(--muted)}.question{font-size:1.35rem;font-weight:850;margin:14px 0 4px}.question-sub{color:var(--muted);margin:0 0 15px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{display:grid;gap:5px}.field label{font-weight:750;font-size:.9rem}.field textarea{width:100%;min-height:66px;resize:vertical;border:1px solid #d7deea;border-radius:10px;padding:10px;font:inherit;font-size:.92rem}.field textarea:focus{outline:2px solid #cdd4ff;border-color:var(--pri)}.answerbox{margin-top:14px;border-radius:13px;padding:14px;background:#f7f8fb;border:1px solid var(--line)}.answerbox h3{margin:0 0 9px;font-size:1rem}.answerline{padding:8px 0;border-top:1px solid var(--line);font-size:.9rem}.answerline b{display:block;color:#39445a;margin-bottom:2px}.feedback{margin-top:12px;padding:12px;border-radius:12px;display:none}.feedback.show{display:block}.feedback.good{background:var(--goodbg);color:var(--good)}.feedback.bad{background:var(--badbg);color:var(--bad)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{text-align:center;background:#f7f8fb;border:1px solid var(--line);border-radius:12px;padding:12px}.stat b{display:block;font-size:1.35rem}.stat span{font-size:.8rem;color:var(--muted)}.wrongitem{border:1px solid var(--line);padding:11px;border-radius:11px;margin-top:8px}.wrongitem b{display:block}.wrongitem small{color:var(--muted)}footer{text-align:center;color:#8791a2;font-size:.8rem;padding:5px 0 28px}.hidden{display:none!important}
+@media(max-width:620px){.wrap{width:calc(100% - 20px)}.panel{padding:16px;border-radius:15px}.parts{grid-template-columns:repeat(2,1fr)}.fields{grid-template-columns:1fr}.head{align-items:flex-start}.question{font-size:1.15rem}.actions button{flex:1}}
+</style>
+</head>
+<body><div class="wrap">
+<header><div class="brand"><span class="logo">✚</span> MMT 암기 도우미</div></header>
+<section class="hero"><span class="eyebrow">PHYSICAL THERAPY STUDY</span><h1>MMT, 항목별로 정확하게!</h1><p>근육부터 대상작용까지 7개 항목을 직접 입력하고<br>자료의 정답과 비교하며 학습하세요.</p></section>
+<main>
+<section class="panel">
+ <div class="head"><div><h2>01. 학습할 파트 선택</h2><p class="sub">업로드한 MMT 2차 자료에 포함된 검사 동작을 기준으로 구성했어요.</p></div><span class="pill" id="selected">전체</span></div>
+ <div class="parts" id="parts">
+  <button class="part active" data-part="전체">전체</button><button class="part" data-part="엉덩관절">엉덩관절</button>
+  <button class="part" data-part="팔꿉관절">팔꿉관절</button><button class="part" data-part="아래팔">아래팔</button>
+  <button class="part" data-part="손목관절">손목관절</button><button class="part" data-part="무릎관절">무릎관절</button>
+  <button class="part" data-part="발목관절">발목관절</button>
+ </div>
+ <div class="actions"><button class="primary" id="start">🔀 랜덤 문제 시작</button><button class="secondary" id="wrongStart">오답만 다시 풀기 (<span id="wrongN">0</span>)</button></div>
+</section>
+<section class="panel">
+ <div class="head"><div><h2>02. MMT 문제 풀이</h2><p class="sub">각 항목에 답을 입력한 뒤 정답을 확인하세요.</p></div><span class="pill" id="mode">학습 대기</span></div>
+ <div class="empty" id="empty">파트를 선택한 뒤 랜덤 문제 시작을 눌러주세요.</div>
+ <div id="quiz" class="hidden">
+  <div class="head"><span class="tag" id="partTag"></span><span class="pill" id="counter"></span></div>
+  <div class="question" id="qtitle"></div><p class="question-sub" id="qsub"></p>
+  <div class="fields" id="fields"></div>
+  <div class="actions"><button class="primary" id="check">정답 확인</button><button class="ghost" id="show">정답 전체 보기</button></div>
+  <div id="feedback" class="feedback" aria-live="polite"></div>
+  <div id="answer" class="answerbox hidden"></div>
+  <div class="actions"><button class="primary hidden" id="next">다음 문제 →</button><button class="ghost" id="end">학습 종료</button></div>
+ </div>
+</section>
+<section class="panel"><div class="head"><div><h2>03. 학습 현황</h2><p class="sub">이번 브라우저 학습 세션 기준</p></div></div>
+ <div class="stats"><div class="stat"><b id="total">0</b><span>푼 문제</span></div><div class="stat"><b id="correct">0</b><span>정답 항목</span></div><div class="stat"><b id="incorrect">0</b><span>오답 문제</span></div></div>
+</section>
+<section class="panel"><div class="head"><div><h2>04. 오답 노트</h2><p class="sub">한 항목이라도 틀린 문제를 저장합니다.</p></div><span class="pill" id="wrongLabel">0개</span></div>
+ <div id="wrongList" class="empty">아직 오답이 없어요.</div><div class="actions"><button class="secondary" id="review" disabled>오답 다시 풀기</button><button class="ghost" id="clear" disabled>오답 기록 초기화</button></div>
+</section>
+<section class="panel"><h2>💡 등급 판정 참고</h2><p class="sub">자료에 적힌 N·G·F·P 등급 기준을 문제별 정답에 포함했습니다. 발바닥굽힘처럼 반복 횟수로 판정하는 항목은 해당 검사만의 기준을 따릅니다. 수업 및 교수님이 제공한 최신 지침을 우선해 확인하세요.</p></section>
+</main><footer>MMT 암기 도우미 · 제공된 「MMT 2차 (25 최종)」 자료 기반</footer>
+</div>
+<script>
+const FIELDS=["근육","자세","고정","동작","저항","등급판정","대상작용"];
+// 각 문제의 정답은 사용자가 제공한 PDF의 검사 요약을 옮긴 것입니다.
+const bank=[
+{part:"엉덩관절",title:"엉덩관절 굽힘 (Hip flexion)",a:[
+"큰허리근, 엉덩근",
+"N~F: 앉은 자세(몸통 안정을 위해 검사대 양 모서리를 잡음) / P: 옆으로 누운 자세(몸통 중립, 아래쪽 다리 굽힘, 위쪽 다리는 몸통과 평행, 검사자가 무릎 안쪽 지지)",
+"N~F: 골반 뒤기울임을 통한 몸통과 골반 / P: 골반",
+"관절운동범위 끝까지 엉덩관절 굽힘",
+"넙다리 먼쪽(무릎 위)에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 굽힘 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"넙다리빗근에 의한 가쪽돌림·벌림 / 넙다리근막긴장근에 의한 안쪽돌림·벌림 / 몸통 젖힘(몸통이 약한 경우 바로 누운 자세에서 가능)"
+]},
+{part:"엉덩관절",title:"엉덩관절 폄 – 큰볼기근·넙다리근 동시 검사",a:[
+"큰볼기근, 반힘줄근, 반막근, 넙다리두갈래근 긴갈래",
+"N~F: 엎드려 누운 자세(무릎관절 폄) / P: 옆으로 누운 자세(검사 다리를 위쪽으로)",
+"골반",
+"관절운동범위 끝까지 엉덩관절 폄",
+"발목 위 다리 뒤쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 폄 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"엉덩관절 굽힘근 구축이 있으면 검사대 끝에 엎드려 누워 엉덩관절을 굽힌 상태에서 시작"
+]},
+{part:"엉덩관절",title:"엉덩관절 폄 – 큰볼기근 단독 검사",a:[
+"큰볼기근",
+"N~F: 엎드려 누운 자세(무릎관절 90° 굽힘) / P: 옆으로 누운 자세(검사 다리를 위쪽으로)",
+"골반",
+"관절운동범위 끝까지 엉덩관절 폄",
+"무릎 바로 위 넙다리 뒤쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 폄 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"엉덩관절 굽힘근 구축이 있으면 검사대 끝에 엎드려 누워 엉덩관절을 굽힌 상태에서 시작"
+]},
+{part:"엉덩관절",title:"엉덩관절 모음 (Hip adduction)",a:[
+"두덩근, 두덩정강근, 긴모음근, 짧은모음근, 큰모음근",
+"N~F: 옆으로 누운 자세 / P: 바로 누운 자세",
+"N~F: 검사하지 않은 다리 / P: 골반과 검사하지 않는 반대쪽 다리",
+"N~F: 무릎을 편 채 엉덩관절 모음 / P: 관절운동범위 끝까지 모음",
+"넙다리 먼쪽 안쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 모음 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"엉덩관절 굽힘근: 골반 뒤기울임과 엉덩관절 안쪽돌림 / 넙다리뒤근: 골반 앞기울임과 엉덩관절 가쪽돌림"
+]},
+{part:"엉덩관절",title:"엉덩관절 벌림 (Hip abduction)",a:[
+"중간볼기근",
+"N~F: 옆으로 누운 자세(검사 다리는 위쪽) / P: 바로 누운 자세",
+"골반",
+"관절운동범위 끝까지 엉덩관절 벌림",
+"무릎 가쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 벌림 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"허리네모근에 의한 몸통 가쪽굽힘 / 넙다리빗근에 의한 가쪽돌림·벌림 / 넙다리근막긴장근에 의한 안쪽돌림·벌림"
+]},
+{part:"엉덩관절",title:"엉덩관절 가쪽돌림 (Hip lateral rotation)",a:[
+"큰볼기근, 궁둥구멍근, 속폐쇄근, 바깥폐쇄근, 위쌍둥이근, 아래쌍둥이근, 넙다리네모근",
+"N~F: 앉은 자세 / P: 바로 누운 자세(검사 다리는 안쪽돌림)",
+"N~F: 넙다리 먼쪽 가쪽면 / P: 골반",
+"N~F: 무릎을 굽힌 채 엉덩관절 가쪽돌림 / P: 관절운동범위 끝까지 가쪽돌림",
+"발목 안쪽에서 바깥쪽 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 가쪽돌림 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"반대쪽 골반 들어올림과 몸통 가쪽굽힘 / 엉덩관절 벌림"
+]},
+{part:"엉덩관절",title:"엉덩관절 안쪽돌림 (Hip medial rotation)",a:[
+"작은볼기근, 중간볼기근, 넙다리근막긴장근",
+"N~F: 앉은 자세 / P: 바로 누운 자세",
+"N~F: 넙다리 먼쪽 안쪽면 / P: 골반",
+"N~F: 무릎을 굽힌 채 엉덩관절 안쪽돌림 / P: 관절운동범위 끝까지 안쪽돌림",
+"발목 바깥쪽에서 안쪽 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 안쪽돌림 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"검사측 골반 들어올림과 몸통 가쪽굽힘 / 엉덩관절 모음"
+]},
+{part:"엉덩관절",title:"엉덩관절 굽힘·벌림·가쪽돌림 및 무릎 굽힘 (넙다리빗근)",a:[
+"넙다리빗근",
+"N~F: 앉은 자세 / P: 바로 누운 자세",
+"N~F: 대상자가 팔로 검사대 고정 / P: 골반",
+"N~F: 엉덩관절 굽힘·벌림·가쪽돌림 및 무릎관절 굽힘 / P: 같은 동작을 ROM 끝까지(발뒤꿈치를 정강뼈를 따라 올리도록 지시)",
+"넙다리뼈 부위: 엉덩관절 굽힘·벌림 저항 / 발목 부위: 가쪽돌림·무릎 굽힘 저항",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 네 동작 수행·유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"엉덩관절 굽힘근(엉덩허리근·넙다리곧은근)에 의한 보상: 엉덩관절 벌림과 가쪽돌림 없이 굽힘만 나타남"
+]},
+{part:"엉덩관절",title:"엉덩관절 굽힘 상태에서 벌림 (넙다리근막긴장근)",a:[
+"넙다리근막긴장근",
+"N~F: 옆으로 누운 자세(검사측 다리가 위, 엉덩관절 45° 굽힘) / P: 길게 앉은 자세, 몸통 45° 뒤로 기울임",
+"골반",
+"N~F: 무릎관절을 펴고 엉덩관절 굽힌 상태에서 벌림 / P: 굽힘 상태에서 ROM 끝까지 벌림",
+"넙다리뼈 먼쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"자료에 별도 대상작용 기재 없음"
+]},
+{part:"팔꿉관절",title:"팔꿉관절 굽힘 (Elbow flexion)",a:[
+"위팔두갈래근, 위팔근, 위팔노근",
+"N~F: 앉은 자세(뒤침: 위팔두갈래근 / 엎침: 위팔근 / 중립: 위팔노근) / P: 앉은 자세, 어깨관절 90° 벌림, 검사자가 팔 지지",
+"N~F: 위팔 / P: 없음",
+"N~F: 팔 굽힘 / P: 아래팔 뒤침·엎침·중립 각각에서 팔 굽힘",
+"손목",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 굽힘 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"자료에 별도 대상작용 기재 없음"
+]},
+{part:"팔꿉관절",title:"팔꿉관절 폄 (Elbow extension)",a:[
+"위팔세갈래근",
+"N~F: 엎드려 누운 자세(어깨관절 90° 벌림, 아래팔을 검사대 끝에 수직으로 내림) / P: 앉은 자세(어깨관절 90° 벌림)",
+"N~F: 팔꿉관절 바로 위 / P: 팔꿉관절 아래",
+"N~F: ROM 끝까지 또는 아래팔이 위팔과 수평이 될 때까지 폄 / P: 팔꿉관절 폄",
+"손목",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 폄 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"어깨관절 가쪽돌림으로 팔꿉관절 폄 / 수평모음 대상작용: 팔꿉관절 폄 대신 어깨관절 수평모음"
+]},
+{part:"아래팔",title:"아래팔 뒤침 (Forearm supination)",a:[
+"위팔두갈래근, 뒤침근",
+"N~F: 앉은 자세(검사측 팔꿉관절 90° 굽힘, 아래팔 엎침) / P: 앉은 자세(어깨관절 45~90° 굽힘, 팔꿉관절 수직)",
+"N~F: 위팔뼈 아래쪽 / P: 팔꿉관절 아래",
+"N~F: 손목 엎침에서 손바닥이 천장을 향하도록 뒤침 / P: 손바닥이 얼굴을 향하도록 뒤침",
+"아래팔 먼쪽 손등면 또는 손을 잡고 엎침 방향으로 저항",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 뒤침 수행 또는 유지. F: 중력에 대항해 완전 뒤침 / P: 중력 최소화 상태에서 완전 ROM",
+"어깨관절 가쪽돌림과 모음"
+]},
+{part:"아래팔",title:"아래팔 엎침 (Forearm pronation)",a:[
+"원엎침근, 네모엎침근",
+"N~F: 앉은 자세(팔꿉관절 90° 굽힘, 아래팔 뒤침) / P: 앉은 자세(어깨관절 45~90° 굽힘, 팔꿉관절 수직)",
+"팔꿉관절 아래",
+"N~F: 손목 뒤침에서 손바닥이 바닥을 향하도록 엎침 / P: 손바닥이 얼굴 반대쪽을 향하도록 엎침",
+"아래팔 먼쪽 손바닥면 또는 손을 잡고 뒤침 방향으로 저항",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 엎침 수행 또는 유지. F: 중력에 대항해 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"어깨관절 안쪽돌림과 벌림"
+]},
+{part:"손목관절",title:"손목관절 굽힘 (Wrist flexion)",a:[
+"노쪽손목굽힘근, 긴손바닥근, 자쪽손목굽힘근",
+"N~F: 앉은 자세(아래팔 뒤침, 손목 중립 또는 약간 폄) / P: 아래팔을 검사대 위, 손목 중립",
+"아래팔 먼쪽",
+"N~F: 손가락과 엄지를 이완한 상태에서 손목 굽힘 / P: 자뼈가 검사대에 닿지 않게 손목 굽힘",
+"손허리뼈 바닥 손바닥쪽에서 아래 방향. 노쪽손목굽힘근은 2번째, 자쪽손목굽힘근은 5번째 손허리뼈 바닥에서 개별 저항",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 굽힘 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"자료에 별도 대상작용 기재 없음"
+]},
+{part:"손목관절",title:"손목관절 폄 (Wrist extension)",a:[
+"긴노쪽손목폄근, 짧은노쪽손목폄근, 자쪽손목폄근",
+"N~F: 팔꿈치와 아래팔을 검사대 위(팔꿉관절 굽힘, 아래팔 엎침) / P: 아래팔 중립으로 검사대 위",
+"N~F: 아래팔 먼쪽 / P: 아래팔 먼쪽 바닥쪽(검사대와 손목 사이 마찰력 상쇄)",
+"N~F: 손가락과 엄지를 이완한 상태에서 손목 폄 / P: 손목 폄",
+"손허리뼈 바닥 손등쪽. 긴·짧은노쪽손목폄근은 2·3번째, 자쪽손목폄근은 5번째 손허리뼈 바닥",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 폄 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"손가락 폄근들의 작용"
+]},
+{part:"무릎관절",title:"무릎관절 굽힘 (Knee flexion)",a:[
+"반힘줄근, 반막근, 넙다리두갈래근",
+"N~F: 엎드려 누운 자세(무릎관절 약 45° 굽힘) / P: 옆으로 누운 자세(검사측 다리가 위쪽)",
+"넙다리 부위",
+"N~F: 무릎관절 90°까지 굽힘. 가쪽돌림 유지 시 넙다리두갈래근, 안쪽돌림 유지 시 반힘줄근·반막근 / P: ROM 끝까지 굽힘",
+"발목 위 다리 뒤쪽에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 굽힘 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"넙다리빗근에 의한 엉덩관절 굽힘·가쪽돌림·무릎 굽힘 / 장딴지근에 의한 발바닥굽힘 / 두덩정강근에 의한 엉덩관절 모음"
+]},
+{part:"무릎관절",title:"무릎관절 폄 (Knee extension)",a:[
+"넙다리곧은근, 가쪽넓은근, 중간넓은근, 안쪽넓은근",
+"N~F: 앉은 자세 / P: 옆으로 누운 자세",
+"넙다리 부위",
+"N~F: 무릎관절 폄(0°를 넘어가지 않음) / P: ROM 끝까지 폄",
+"발목관절 위에서 아래 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 폄 수행 또는 유지. F: 중력에 대항해 저항 없이 완전 ROM / P: 중력 최소화 상태에서 완전 ROM",
+"자료에 별도 대상작용 기재 없음"
+]},
+{part:"발목관절",title:"발목관절 발바닥굽힘 (Ankle plantar flexion)",a:[
+"장딴지근, 가자미근",
+"N~F: 선 자세(무릎을 펴고 한 다리로 섬) / P: 엎드린 자세(검사대 끝에 발을 내림)",
+"N~F: 균형을 위해 손가락으로 검사대 지지 / P: 발목",
+"N~F: 2초에 한 번 최대 ROM까지 발꿈치 들기(처음 높이의 50% 이하가 되면 종료) / P: ROM 끝까지 발바닥굽힘",
+"N~F: 대상자 체중 / P: 발허리뼈머리에서 발등굽힘 방향",
+"N: 25회 이상 / G: 2~24회 / F: 1회 / P: 중력과 저항에 대항해 완전 ROM / P-: 중력과 저항에 대항해 부분 ROM",
+"긴발가락굽힘근·긴엄지굽힘근에 의한 발가락 굽힘 동반 / 짧은·긴종아리근에 의한 가쪽번짐 / 뒤정강근에 의한 안쪽번짐"
+]},
+{part:"발목관절",title:"발바닥굽힘과 안쪽번짐 (뒤정강근)",a:[
+"뒤정강근",
+"앉은 자세",
+"발목관절 위쪽 종아리",
+"발바닥굽힘과 안쪽번짐",
+"발바닥 안쪽에서 발등굽힘과 가쪽번짐 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 수행 또는 유지. F: 저항 없이 중력에 대항해 완전 ROM / P: 저항 없이 중력에 대항해 부분 ROM",
+"긴발가락굽힘근과 긴엄지굽힘근에 의해 발가락 굽힘 동반"
+]},
+{part:"발목관절",title:"발등굽힘과 안쪽번짐 (앞정강근)",a:[
+"앞정강근",
+"앉은 자세",
+"발목관절 위쪽 종아리",
+"발등굽힘과 안쪽번짐",
+"발바닥 안쪽에서 발바닥굽힘과 가쪽번짐 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 수행 또는 유지. F: 저항 없이 중력에 대항해 완전 ROM / P: 저항 없이 중력에 대항해 부분 ROM",
+"발가락폄근과 긴엄지폄근에 의해 발가락 폄 동반"
+]},
+{part:"발목관절",title:"발등굽힘과 가쪽번짐 (종아리근)",a:[
+"긴종아리근, 짧은종아리근",
+"앉거나 바로 누운 자세",
+"발목관절 위쪽 종아리",
+"자료의 검사동작 표기: 발목관절 발바닥굽힘과 안쪽번짐(등급 설명은 가쪽번짐으로 기재)",
+"발바닥 바깥쪽에서 안쪽번짐과 약간의 발등굽힘 방향",
+"N: 중력과 최대 저항 / G: 중력과 중증도 저항에 대항해 가쪽번짐 수행 또는 유지. F: 저항 없이 중력에 대항해 완전 ROM / P: 저항 없이 중력에 대항해 부분 ROM",
+"자료에 별도 대상작용 기재 없음"
+]}
+];
+let selected="전체",queue=[],idx=0,current=null,wrongIds=new Set(JSON.parse(localStorage.getItem("mmtFullWrong")||"[]")),stats={total:0,correct:0,incorrect:0},answered=false;
+const $=id=>document.getElementById(id);
+function norm(s){return String(s||"").toLowerCase().replace(/\s+/g,"").replace(/[·,().\-_/°~]/g,"").replace(/:/g,"")}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function renderStats(){$("total").textContent=stats.total;$("correct").textContent=stats.correct;$("incorrect").textContent=stats.incorrect}
+function renderWrong(){let arr=bank.filter((q,i)=>wrongIds.has(i));$("wrongN").textContent=arr.length;$("wrongLabel").textContent=arr.length+"개";$("review").disabled=!arr.length;$("clear").disabled=!arr.length;$("wrongStart").disabled=!arr.length;$("wrongList").innerHTML=arr.length?arr.map(q=>`<div class="wrongitem"><b>${escapeHTML(q.part)} · ${escapeHTML(q.title)}</b><small>7개 항목 중 오답이 있었던 문제</small></div>`).join(""):'<div class="empty">아직 오답이 없어요.</div>'}
+function begin(onlyWrong=false){let base=bank.map((q,i)=>({...q,id:i})).filter(q=>onlyWrong?wrongIds.has(q.id):(selected==="전체"||q.part===selected));if(!base.length){alert(onlyWrong?"오답 노트가 비어 있어요.":"선택한 파트의 문제가 없습니다.");return}queue=shuffle(base);idx=0;$("empty").classList.add("hidden");$("quiz").classList.remove("hidden");$("mode").textContent=onlyWrong?"오답 복습":"랜덤 학습";showQ();$("quiz").scrollIntoView({behavior:"smooth",block:"start"})}
+function showQ(){answered=false;current=queue[idx];$("partTag").textContent=current.part;$("counter").textContent=`문제 ${idx+1} / ${queue.length}`;$("qtitle").textContent=current.title;$("qsub").textContent="아래 7개 항목을 각각 입력하세요. 자료에 없는 대상작용은 '자료에 별도 기재 없음'으로 답해도 됩니다.";
+$("fields").innerHTML=FIELDS.map((f,i)=>`<div class="field"><label for="f${i}">${i+1}. ${f}</label><textarea id="f${i}" placeholder="${f} 입력..."></textarea></div>`).join("");
+$("feedback").className="feedback";$("feedback").textContent="";$("answer").classList.add("hidden");$("next").classList.add("hidden");$("check").classList.remove("hidden");$("show").classList.remove("hidden");$("check").disabled=false;$("show").disabled=false;$("progressUnused");}
+function answerMarkup(){return `<h3>정답 및 해설 기준</h3>`+FIELDS.map((f,i)=>`<div class="answerline"><b>${f}</b>${escapeHTML(current.a[i])}</div>`).join("")}
+function reveal(){ $("answer").innerHTML=answerMarkup();$("answer").classList.remove("hidden");}
+function check(){if(answered)return;let vals=FIELDS.map((_,i)=>$("f"+i).value.trim());let filled=vals.filter(Boolean).length;if(!filled){alert("최소 한 항목 이상 입력해 주세요. 모든 항목을 입력하는 것을 권장합니다.");return}
+answered=true;let matched=0;
+vals.forEach((v,i)=>{if(!v)return;const target=norm(current.a[i]),input=norm(v);if(input===target || (input.length>=3 && target.includes(input)) || (input.length>=5 && input.includes(target)))matched++});
+const rate=Math.round(matched/7*100);const isPerfect=matched===7;
+stats.total++;stats.correct+=matched;stats.incorrect+=isPerfect?0:1;renderStats();
+if(isPerfect)wrongIds.delete(current.id);else wrongIds.add(current.id);
+localStorage.setItem("mmtFullWrong",JSON.stringify([...wrongIds]));renderWrong();
+$("feedback").className="feedback show "+(isPerfect?"good":"bad");
+$("feedback").innerHTML=`<b>${isPerfect?"7개 항목 모두 입력했어요!":"입력한 답을 정답 자료와 비교해 보세요."}</b>입력 항목 ${filled}/7 · 자동 일치 참고 ${matched}/7 (${rate}%)<br><small>※ 문장형 정답은 표현 차이 때문에 자동 판정이 정확하지 않을 수 있어요. 아래 정답을 열어 의미와 내용을 직접 대조하세요.</small>`;
+reveal();$("fields").querySelectorAll("textarea").forEach(x=>x.disabled=true);$("check").disabled=true;$("next").classList.remove("hidden");
+}
+function next(){idx++;if(idx>=queue.length){current=null;$("qtitle").textContent="이번 학습을 마쳤어요! 🎉";$("qsub").textContent="다른 파트를 선택하거나 오답 문제를 다시 풀어보세요.";$("fields").innerHTML="";$("feedback").className="feedback";$("answer").classList.add("hidden");$("check").classList.add("hidden");$("show").classList.add("hidden");$("next").classList.add("hidden");$("counter").textContent=queue.length+"문제 완료";return}showQ()}
+function end(){queue=[];current=null;$("quiz").classList.add("hidden");$("empty").classList.remove("hidden");$("empty").textContent="학습이 종료되었어요. 파트를 선택하고 다시 시작해 보세요.";$("mode").textContent="학습 대기"}
+document.querySelectorAll(".part").forEach(b=>b.addEventListener("click",()=>{selected=b.dataset.part;document.querySelectorAll(".part").forEach(x=>x.classList.toggle("active",x===b));$("selected").textContent=selected}));
+$("start").onclick=()=>begin(false);$("wrongStart").onclick=()=>begin(true);$("review").onclick=()=>begin(true);$("check").onclick=check;$("show").onclick=reveal;$("next").onclick=next;$("end").onclick=end;
+$("clear").onclick=()=>{if(confirm("저장된 오답 기록을 모두 삭제할까요?")){wrongIds.clear();localStorage.removeItem("mmtFullWrong");renderWrong()}};
+renderStats();renderWrong();
+</script></body></html>
